@@ -1,10 +1,79 @@
 <body>
-  <h1>it works!</h1>
+  <div class=c>
+    <div class=h>
+      <div class=e></div>
+      <div class=m></div>
+    </div>
+    <div class=b></div>
+  </div>
+  <p id=t>Click to Quack!</p>
   <style>
-    body { background: black; color: white; font-family: sans-serif; }
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      transition: background 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+    }
+    .c {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .h {
+      position: relative;
+      transform: translate(-100px, 0);
+      background: yellow;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+    }
+    .e {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      background: black;
+      width: 25px;
+      height: 25px;
+      border-radius: 999px;
+    }
+    .m {
+      position: absolute;
+      top: 80px;
+      right: 90%;
+      background: orangered;
+      width: 60px;
+      height: 30px;
+      border-radius: 999px;
+    }
+    .b {
+      position: relative;
+      transform: translate(35px, -50px);
+      background: yellow;
+      width: 275px;
+      height: 175px;
+      border-radius: 75px;
+    }
+    #t {
+      font-size: 48px;
+    }
   </style>
   <script>
-    const title = document.querySelector("h1");
-    title.onclick = () => (title.textContent = "you clicked it");
+    const body = document.body;
+    function quack(e) {
+      body.style.transition = "none";
+      body.style.background = "#C85A17";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          body.style.transition = "background 0.5s ease";
+          body.style.background = "#111";
+        });
+      });
+    }
+    window.addEventListener("pointerdown", quack);
   </script>
 </body>
