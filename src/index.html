@@ -1,5 +1,5 @@
 <body>
-  <div class=c>
+  <div id=d>
     <div class=h>
       <div class=e></div>
       <div class=m></div>
@@ -12,17 +12,21 @@
       background: #111;
       color: white;
       font-family: sans-serif;
-      transition: background 0.5s ease;
+      transition: background 0.5s ease-out;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 32px;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      user-select: none;
     }
-    .c {
+    #d {
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: transform 0.4s ease-out;
     }
     .h {
       position: relative;
@@ -60,20 +64,56 @@
     }
     #t {
       font-size: 48px;
+      margin: 0;
+      transform: translateX(175px) rotate(-15deg);
+      transition: transform 0.05s ease-out;
+      -webkit-text-stroke: 10px #333;
+      paint-order: stroke fill;
+    }
+    .h, .b {
+      transition: background 0.3s ease-out;
     }
   </style>
   <script>
     const body = document.body;
-    function quack(e) {
+    const duck = document.getElementById("d");
+    const duckHnB = document.querySelectorAll(".h, .b");
+    const text = document.getElementById("t");
+    let times = 0;
+    const audioCtx = new AudioContext();
+    window.addEventListener("pointerdown", () => {
+      text.innerText = `Quack! x${++times}`;
       body.style.transition = "none";
+      duck.style.transition = "none";
+      duckHnB.forEach(p => p.style.transition = "none");
       body.style.background = "#C85A17";
+      duck.style.transform = "scale(1.25)";
+      duckHnB.forEach(p => p.style.background = "#FFF566");
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          body.style.transition = "background 0.5s ease";
+          body.style.transition = "background 0.5s ease-out";
+          duck.style.transition = "transform 0.4s ease-out";
+          duckHnB.forEach(p => p.style.transition = "background 0.3s ease-out");
           body.style.background = "#111";
+          duck.style.transform = "scale(1)";
+          duckHnB.forEach(p => p.style.background = "yellow");
+          text.style.transform = `translateX(175px) rotate(${Math.floor(Math.random() * 31) - 15}deg) scale(${Math.random() * 0.25 + 1.0})`;
         });
       });
-    }
-    window.addEventListener("pointerdown", quack);
+      const now = audioCtx.currentTime;
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.type = 'sawtooth';
+      oscillator.frequency.setValueAtTime(300, now);
+      oscillator.frequency.linearRampToValueAtTime(450, now + 0.08);
+      oscillator.frequency.linearRampToValueAtTime(250, now + 0.25);
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(0.3, now + 0.03);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.25);
+    });
   </script>
 </body>
