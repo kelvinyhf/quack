@@ -22,12 +22,14 @@
       overflow: hidden;
       user-select: none;
     }
+
     #d {
       display: flex;
       flex-direction: column;
       align-items: center;
       transition: transform 0.4s ease-out;
     }
+
     .h {
       position: relative;
       transform: translate(-100px, 0);
@@ -36,6 +38,7 @@
       height: 150px;
       border-radius: 999px;
     }
+
     .e {
       position: absolute;
       top: 40px;
@@ -45,6 +48,7 @@
       height: 25px;
       border-radius: 999px;
     }
+
     .m {
       position: absolute;
       top: 80px;
@@ -54,6 +58,7 @@
       height: 30px;
       border-radius: 999px;
     }
+
     .b {
       position: relative;
       transform: translate(35px, -50px);
@@ -62,6 +67,7 @@
       height: 175px;
       border-radius: 75px;
     }
+
     #t {
       font-size: 48px;
       margin: 0;
@@ -70,6 +76,7 @@
       -webkit-text-stroke: 10px #333;
       paint-order: stroke fill;
     }
+
     .h, .b {
       transition: background 0.3s ease-out;
     }
@@ -81,39 +88,50 @@
     const text = document.getElementById("t");
     let times = 0;
     const audioCtx = new AudioContext();
+
     window.addEventListener("pointerdown", () => {
       text.innerText = `Quack! x${++times}`;
+
       body.style.transition = "none";
       duck.style.transition = "none";
       duckHnB.forEach(p => p.style.transition = "none");
+
       body.style.background = "#C85A17";
       duck.style.transform = "scale(1.25)";
       duckHnB.forEach(p => p.style.background = "#FFF566");
+
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           body.style.transition = "background 0.5s ease-out";
           duck.style.transition = "transform 0.4s ease-out";
           duckHnB.forEach(p => p.style.transition = "background 0.3s ease-out");
+
           body.style.background = "#111";
           duck.style.transform = "scale(1)";
           duckHnB.forEach(p => p.style.background = "yellow");
+
           text.style.transform = `translateX(175px) rotate(${Math.floor(Math.random() * 31) - 15}deg) scale(${Math.random() * 0.25 + 1.0})`;
         });
       });
+
       const now = audioCtx.currentTime;
       const oscillator = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
       oscillator.type = 'sawtooth';
+
       oscillator.frequency.setValueAtTime(300, now);
       oscillator.frequency.linearRampToValueAtTime(450, now + 0.08);
       oscillator.frequency.linearRampToValueAtTime(250, now + 0.25);
+
       gainNode.gain.setValueAtTime(0, now);
       gainNode.gain.linearRampToValueAtTime(0.3, now + 0.03);
       gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
       oscillator.connect(gainNode);
       gainNode.connect(audioCtx.destination);
       oscillator.start(now);
       oscillator.stop(now + 0.25);
+
     });
   </script>
 </body>
